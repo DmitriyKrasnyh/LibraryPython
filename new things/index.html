@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Электронный учебник Django</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        function updateTime() {
+            document.getElementById('time').innerHTML = new Date().toLocaleTimeString();
+        }
+        setInterval(updateTime, 1000);
+    </script>
+</head>
+<body>
+    <div class="topbar">
+        <button class="button" onclick="location.href='index.html'">Главная</button>
+    
+        <div class="dropdown">
+            <button class="button" onclick="location.href='theory.html'">Теория</button>
+            <div class="dropdown-content">
+                <!-- Лекции -->
+                <a href="javascript:loadLecture('theory', 1)"><b>Теория №1</b>. Введение в разработку мобильных приложений»</a>
+                <a href="javascript:loadLecture('theory', 2)"><b>Теория №2</b>. Виды приложений и их структура</a>
+                <a href="javascript:loadLecture('theory', 3)"><b>Теория №3</b>. Визуальный дизайн интерфейсов</a>
+                <a href="javascript:loadLecture('theory', 4)"><b>Теория №4</b>. Элементы управления и дизайн навигации</a>
+                <a href="javascript:loadLecture('theory', 5)"><b>Теория №5</b>. Основы разработки многооконных приложений</a>
+                <a href="javascript:loadLecture('theory', 6)"><b>Теория №6</b>. Работа с анимацией</a>
+                <a href="javascript:loadLecture('theory', 7)"><b>Теория №7</b>. Работа с графикой</a>                
+            </div>
+        </div>
+    
+        <div class="dropdown">
+            <button class="button" onclick="location.href='practice.html'">Лабораторные работы</button>
+            <div class="dropdown-content">
+                <!-- Практики -->
+                <a href="javascript:loadLecture('practice', 1)"><b>Лабораторная работа №1</b>. </a>
+                <a href="javascript:loadLecture('practice', 2)"><b>Лабораторная работа №2</b>. </a>
+                <a href="javascript:loadLecture('practice', 3)"><b>Лабораторная работа №3</b>. </a>
+                <a href="javascript:loadLecture('practice', 1)"><b>Лабораторная работа №4</b>. </a>
+                <a href="javascript:loadLecture('practice', 2)"><b>Лабораторная работа №5</b>. </a>
+            </div>
+        </div>
+    
+        <button class="button" onclick="location.href='testing.html'">Тестирование</button>
+        <button class="button" onclick="location.href='reference.html'">Справка</button>
+    </div>
+    <div class="main-content">
+        <h1>Электронный учебник по теме "Разработка пользовательского интерфейса мобильный приложений"</h1>
+        <div id="time"></div>
+        <button id="adminButton" class="button admin-button" onclick="location.href='admin.html'" style="display:none;">Администрирование</button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser === "admin") {
+                document.getElementById('adminButton').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

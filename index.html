@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Электронный учебник</title>
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #004d40;
+    color: white;
+    text-align: center;
+    padding: 100px;
+  }
+  .header {
+    margin-bottom: 50px;
+  }
+  .time {
+    font-size: 24px;
+    margin-top: 50px;
+  }
+  .navbar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+  .nav-button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+  }
+  .nav-button:hover {
+    background-color: white;
+    color: black;
+  }
+  .active {
+    background-color: #00897b;
+    color: white;
+  }
+
+  .admin-container {
+    display: flex; /* Используем Flexbox */
+    justify-content: center; /* Центрируем содержимое по горизонтали */
+    margin-top: 20px; /* Отступ сверху для отделения от других элементов */
+  }
+
+  .admin-button {
+      background-color: #f44336; /* Красный цвет фона */
+      color: white; /* Белый текст */
+      padding: 12px 24px; /* Паддинг */
+      font-size: 18px; /* Размер шрифта */
+      border: none; /* Убираем рамку */
+      border-radius: 8px; /* Округление углов */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень */
+      transition: all 0.3s ease; /* Плавное изменение */
+      cursor: pointer; /* Курсор в виде указателя */
+  }
+
+  .admin-button:hover {
+      background-color: #e53935; /* Темнее красный при наведении */
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Большая тень при наведении */
+  }
+
+</style>
+</head>
+<body>
+
+<div class="navbar">
+  <button class="nav-button active" onclick="window.location.href='index.html';">Главная</button>
+  <button class="nav-button" onclick="window.location.href='theory.html';">Теория</button>
+  <button class="nav-button" onclick="window.location.href='practice.html';">Практика</button>
+  <button class="nav-button" onclick="window.location.href='testing.html';">Тестирование</button>
+  <button class="nav-button" onclick="window.location.href='reference.html';">Справка</button>
+</div>
+
+<div class="header">
+  <h1>Доброго времени суток!</h1>
+  <h2>Электронный учебник</h2>
+  <h3>по теме: "Использование встроенного языка 1с"</h3>
+  <p>Этот учебник поможет вам изучить данную тему с помощью теории,<br>
+  закрепить практическую часть и проверить знания с помощью тестирования.</p>
+</div>
+
+<div class="time" id="time">
+  Сейчас: <span id="realtime"></span>
+</div>
+<div class="admin-container">
+  <button id="adminButton" class="button admin-button" onclick="location.href='admin.html'">Администрирование</button>
+</div>
+
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+      const currentUser = JSON.parse(localStorage.getItem('currentUser')); // Assume currentUser is stored as an object
+      if (currentUser && currentUser.isAdmin) {
+          document.getElementById('adminButton').style.display = 'block';
+      } else {
+          document.getElementById('adminButton').style.display = 'none';
+      }
+  });
+
+  function updateTime() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    document.getElementById('realtime').textContent = `${hours}:${minutes}:${seconds}`;
+  }
+  
+  setInterval(updateTime, 1000);
+  updateTime(); // Инициализация времени сразу при загрузке страницы
+</script>
+
+</body>
+</html>

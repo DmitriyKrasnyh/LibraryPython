@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Теория</title>
+    <style>
+                
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #004d40;
+            color: white;
+            text-align: left;
+            padding-top: 70px; /* Adjusted for fixed navbar */
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: center;
+            list-style-type: none;
+            padding: 0;
+            background-color: #00897b;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Shadow added */
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            width: 60%;
+            left: 20%;
+            margin-top: 0;
+            z-index: 1000; /* Ensure navbar is above other elements */
+        }
+
+        .grade-display {
+            font-size: 48px;
+            color: #fdd835; /* Желтый цвет для привлечения внимания */
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+            background-color: #00695c; /* Темно-зеленый фон */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            transition: transform 0.5s ease;
+        }
+
+        .grade-display:hover {
+            transform: scale(1.1); /* Небольшое увеличение при наведении */
+        }
+
+
+        .nav-button {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        transition-duration: 0.4s;
+        cursor: pointer;
+        }
+
+        .nav-button:hover {
+        background-color: #00796b;
+        }
+
+        .test-container {
+            padding: 20px;
+            margin-top: 60px; /* Adjusted to navbar height */
+            background-color: #00897b;
+            width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin: 80px auto; /* Centering the container */
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffffff;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #00695c;
+        }
+
+        button:disabled {
+            background-color: #BDBDBD;
+            cursor: not-allowed;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1500;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto; /* More responsive positioning */
+            padding: 20px;
+            border-radius: 5px;
+            width: 300px; /* Fixed width for modal */
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .close-modal {
+            float: right;
+            width: 32px;
+            line-height: 32px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 50%;
+            background-color: #f44336;
+            color: white;
+        }
+
+        .close-modal:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <ul class="navbar">
+        <li><a href="index.html" class="nav-button">Главная</a></li>
+        <li><a href="theory.html" class="nav-button">Теория</a></li>
+        <li><a href="practice.html" class="nav-button">Практика</a></li>
+        <li><a href="testing.html" class="nav-button">Тестирование</a></li>
+        <li><a href="reference.html" class="nav-button active">Справка</a></li>
+    </ul>
+    <div class="test-container">
+        <h1>Тестирование</h1>
+        <div id="question">Загрузка вопросов...</div>
+        <button class="button" id="nextButton" disabled>Следующий вопрос</button>
+    </div>
+
+    <div id="resultsContainer" style="display: none;">
+        <h2 id="gradeTitle">Ваша оценка:</h2>
+        <div id="grade" class="grade-display"></div>
+    </div>
+
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <input type="text" id="username" placeholder="Введите логин">
+            <input type="password" id="userPassword" placeholder="Введите пароль">
+            <button onclick="changeUser()">Войти</button>
+        </div>
+    </div>
+
+    <script>
+
+        
+
+        document.addEventListener('DOMContentLoaded', function() {
+            openLoginModal();
+            loadQuestionsForSelectedTest();
+            setDefaultUser();
+            document.getElementById('nextButton').addEventListener('click', loadNextQuestion); // Добавление слушателя событий к кнопке
+        });
+
+        function loadNextQuestion() {
+            const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+            if (selectedAnswer) {
+                if (parseInt(selectedAnswer.value) === questions[currentQuestionIndex].correctAnswer) {
+                    correctAnswers++;
+                }
+                selectedAnswer.checked = false; // Сброс выбранного ответа
+            }
+
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayCurrentQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0;
+        let questions = [];
+
+        function loadQuestionsForSelectedTest() {
+            let selectedTest = localStorage.getItem('selectedTest') || 'test1';
+            loadQuestions(selectedTest);
+            currentQuestionIndex = 0;
+            correctAnswers = 0;
+        }
+
+        function setDefaultUser() {
+            localStorage.setItem('currentUser', 'user'); // Установка пользователя по умолчанию как "user"
+        }
+
+        function loadQuestions(testKey) {
+            const allTests = {
+                'test1': [
+                    { question: "Что такое «1С:Предприятие»?",                                           answers: [ "Игровая платформа", "Система автоматизации деятельности предприятий", "Социальная сеть", "Платформа для создания веб-сайтов" ],             correctAnswer: 1 },
+                    { question: "Из каких основных частей состоит система «1С:Предприятие»?",            answers: [ "Клиент и сервер", "Браузер и плагины", "Платформа и конфигурации",  "Ядро и модули" ],                                                       correctAnswer: 2 },
+                    { question: "Какая последняя версия платформы «1С:Предприятие» на момент описания?", answers: [  "7.7",  "8.1", "8.3",  "9.0" ],                                                                                                                correctAnswer: 2 },   
+                    { question: "Для чего предназначена конфигурация «1С:Бухгалтерия предприятия»?",     answers: [  "Для создания веб-сайтов",  "Для ведения бухгалтерского и налогового учёта",  "Для автоматизации производства", "Для управления персоналом" ], correctAnswer: 1 },
+                    { question: "Что представляет собой язык программирования 1С?",                      answers: [  "Общего назначения",  "Для разработки игр",  "Предметно-ориентированный",  "Только для веб-разработки" ],                                       correctAnswer: 2 },
+                    { question: "Какие СУБД поддерживает «1С»?",                                         answers: [  "Только Microsoft SQL Server",  "Только MySQL",  "Только PostgreSQL",  "Microsoft SQL Server, PostgreSQL, IBM Db2, Oracle Database" ],          correctAnswer: 3 },
+                    { question: "Какие операционные системы поддерживаются решениями «1С»?",             answers: [ "Только Windows",  "Windows и Linux", "Windows, macOS и Linux", "Только macOS" ],                                                           correctAnswer: 2 }
+                ],
+
+                'test2': [
+                    { question: "Какой первый шаг для открытия конфигуратора в системе «1С:Предприятие»?", answers: ["Выбрать \"Файл > Открыть\"", "Запустить программу 1С:Предприятие", "Войти в \"Сервис > Настройки\"", "Открыть \"Конфигурация > Управление данными\""], correctAnswer: 1 },
+                    { question: "Какой пункт меню нужно выбрать для создания нового документа?", answers: ["Конфигурация > Создать документ", "Файл > Новый документ", "Конфигурация > Открыть конфигурацию", "Документы > Создать > Документ"], correctAnswer: 3 },
+                    { question: "Какие обязательные реквизиты необходимо добавить для документа «Поступление товаров»?", answers: ["Номер, Дата, Время, Склад", "Название, Дата, Время, Количество", "Номер, Дата, Время", "Номер, Склад, Количество"], correctAnswer: 2 },
+                    { question: "Что представляет собой реквизит \"Склад\" в документе «Поступление товаров»?", answers: ["Число", "Строка", "СправочникСсылка.Склады", "Дата"], correctAnswer: 2 },
+                    { question: "Какая табличная часть должна быть добавлена в документ «Поступление товаров»?", answers: ["Клиенты", "Товары", "Поставщик", "Заказы"], correctAnswer: 1 },
+                    { question: "Какие реквизиты необходимо добавить в табличную часть \"Товары\" документа «Поступление товаров»?", answers: ["Количество, Цена, Сумма", "Наименование, Цена, Скидка", "Код, Наименование, Единица измерения", "Серийный номер, Срок годности, Склад"], correctAnswer: 0 },
+                    { question: "Что необходимо сделать после добавления всех реквизитов и табличной части в документе?", answers: ["Закрыть окно без сохранения", "Проверить корректность данных", "Нажать на иконку в виде дискеты для сохранения изменений", "Отправить документ на утверждение"], correctAnswer: 2 }
+                ],
+                'test3': [
+                    { question: "Какие измерения используются в регистре \"ОстаткиТоваров\"?", answers: ["Поставщик и Клиент", "Склад и Товар", "Дата и Время", "Сумма и Количество"], correctAnswer: 1 },
+                    { question: "Какие типы данных используются для ресурсов в регистре \"ОстаткиТоваров\"?", answers: ["Целое число", "Строка", "Неотрицательное число", "Дата"], correctAnswer: 2 },
+                    { question: "Какой вид движения используется в конструкторе движений для документа \"ПоступлениеТоваров\"?", answers: ["Расход", "Приход", "Перемещение", "Инвентаризация"], correctAnswer: 1 },
+                    { question: "Какие параметры указываются в конструкторе движений для документа \"ПоступлениеТоваров\"?", answers: ["Количество и Наименование товара", "Склад и Поставщик", "Количество и Сумма", "Дата и Время"], correctAnswer: 2 },
+                    { question: "Что автоматически создает программа для регистра накопления при проведении документа?", answers: ["Отчет о движениях товаров", "Процедуру проведения документа", "График поставок", "Список клиентов"], correctAnswer: 1 },
+                    { question: "Какой вид движения указывается в конструкторе движений для документа \"ПродажаТоваров\"?", answers: ["Приход", "Расход", "Возрат", "Списание"], correctAnswer: 1 },
+                    { question: "Какая основная цель использования регистров накопления в системе \"1С:Предприятие\"?", answers: ["Учет времени работы сотрудников", "Отслеживание изменений в количестве и стоимости товаров на складе", "Управление финансовыми потоками предприятия", "Отслеживание налогов в ЦБРФ"], correctAnswer: 0 }
+                ] 
+            };
+
+            questions = allTests[testKey] || [];
+            displayCurrentQuestion();
+        }
+
+        function displayCurrentQuestion() {
+            if (currentQuestionIndex < questions.length) {
+                const questionObj = questions[currentQuestionIndex];
+                let questionHtml = `<h2>${questionObj.question}</h2><form>`;
+
+                questionObj.answers.forEach((answer, index) => {
+                    questionHtml += `<input type="radio" id="answer${index}" name="answer" value="${index}">
+                                    <label for="answer${index}">${answer}</label>`;
+                });
+
+                questionHtml += `</form>`;
+                document.getElementById('question').innerHTML = questionHtml;
+                document.getElementById('nextButton').textContent = currentQuestionIndex === questions.length - 1 ? 'Закончить тест' : 'Следующий вопрос';
+            } else {
+                showResults();
+            }
+        }
+
+        function loadNextQuestion() {
+            const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+            if (selectedAnswer) {
+                if (parseInt(selectedAnswer.value) === questions[currentQuestionIndex].correctAnswer) {
+                    correctAnswers++;
+                }
+                selectedAnswer.checked = false; // Сброс выбранного ответа
+            }
+
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayCurrentQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            const totalQuestions = questions.length;
+            const wrongAnswers = totalQuestions - correctAnswers;
+            let grade;
+
+            if (wrongAnswers === 0) {
+                grade = 5;
+            } else if (wrongAnswers === 1 || wrongAnswers === 2) {
+                grade = 4;
+            } else if (wrongAnswers === 3 || wrongAnswers === 4) {
+                grade = 3;
+            } else {
+                grade = 2;
+            }
+
+            document.getElementById('question').innerHTML = `<h2>Ваша оценка: ${grade}</h2>`;
+            document.getElementById('nextButton').style.display = 'none';
+        }
+
+
+        // Эта функция должна добавлять класс modal-open к body, делая фон затемненным
+        
+        function openLoginModal() {
+            document.getElementById('loginModal').style.display = 'block';
+            document.body.classList.add('modal-open');
+        }
+
+        // Эта функция удаляет класс modal-open из body, возвращая нормальное состояние фона
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+            document.body.classList.remove('modal-open');
+        }
+
+        function changeUser() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('userPassword').value;
+            var users = JSON.parse(localStorage.getItem('users') || '[]');
+
+            var user = users.find(user => user.username === username && user.password === password);
+            if (user) {
+                localStorage.setItem('currentUser', JSON.stringify(user));  // Save the whole user object
+                closeLoginModal(); // Close the modal window
+                document.getElementById('nextButton').disabled = false; // Enable the "Next Question" button
+                alert('Пользователь изменен на ' + username);
+            } else {
+                alert('Неправильное имя пользователя или пароль.');
+            }
+        }
+
+
+        document.getElementById('loginModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeLoginModal(); // Закрытие модального окна при клике вне его контента
+            }
+        });
+    </script>
+</body>
+</html>
