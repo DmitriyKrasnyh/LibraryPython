@@ -1,184 +1,156 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Практика</title>
-    <style>
-                
-                body {
-                    font-family: 'Arial', sans-serif;
-                    background-color: #004d40;
-                    color: white;
-                    text-align: left;
-                    padding-top: 70px; /* Adjusted for fixed navbar */
-                }
-
-                .navbar {
-                    display: flex;
-                    justify-content: center;
-                    list-style-type: none;
-                    padding: 0;
-                    background-color: #00897b;
-                    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Shadow added */
-                    overflow: hidden;
-                    position: fixed;
-                    top: 0;
-                    width: 60%;
-                    left: 20%;
-                    margin-top: 0;
-                    z-index: 1000; /* Ensure navbar is above other elements */
-                }
-
-        .nav-button {
-        display: block;
-        color: white;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-        transition-duration: 0.4s;
-        cursor: pointer;
-        }
-
-        .nav-button:hover {
-        background-color: #00796b;
-        }
-
-        .active {
-        background-color: #009688;
-        color: white;
-        }
-
-        .content {
-            background-color: #f5f5f5; /* Soft shade of white */
-            color: #333; /* Soft black for text */
-            margin-top: 70px;
-            padding: 20px;
-            font-size: 16px; /* Increased font size */
-            width: 60%;
-            margin-left: auto;
-            margin-right: auto;
-            box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1); /* Shadow added */
-            border-radius: 4px; /* Rounded corners */
-        }
-
-        .practice-buttons {
-            display: flex;
-            flex-wrap: wrap; /* Wrap items onto the next line */
-            justify-content: space-around; /* Distribute space before, between, and after the lines */
-            padding: 0;
-            margin: 20px 0;
-        }
-
-        .practice-button {
-            flex: 1 1 auto; /* Allow buttons to grow and shrink as needed */
-            margin: 5px; /* Spacing between buttons */
-            padding: 10px 15px; /* Padding inside buttons */
-            background-color: #00897b; /* Base background color */
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            transition: all 0.3s ease; /* Smooth transition for hover effects */
-            border: none; /* No border by default */
-            border-radius: 5px; /* Rounded corners */
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Subtle shadow */
-            font-weight: bold; /* Make the text bold */
-        }
-
-        .practice-button:hover {
-            background-color: #00796b;
-        }
-
-        .practice-button.active {
-            background-color: #009688; /* Изменено на цвет активной кнопки */
-            color: white;
-        }
-
-        .pdf-viewer {
-            box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1); /* Shadow added */
-            border: none; /* Removed the border */
-            border-radius: 4px; /* Rounded corners */
-            background-color: #fff; /* Pure white for contrast */
-            flex-grow: 1;
-            text-align: center;
-            border: 2px solid #00897b;
-            padding: 10px;
-            height: 600px; /* Регулируемый размер */
-            margin-left: 5px;
-        }
-
-        @media (max-width: 768px) {
-            .practice-button {
-                flex: 0 0 48%; /* Make buttons take half of the container width on mobile */
-                margin-bottom: 10px; /* Add some space at the bottom of each button */
-            }
-
-        
-        .practice-button:before {
-            content: counter(item) ". "; /* Adding numbers before buttons */
-            counter-increment: item; /* Incrementing counter for each button */
-            color: #adf; /* Number color */
-            font-weight: bold;
-        }
-        .practice-button:not(:last-child) {
-            margin-right: 10px; /* Add right margin for all buttons except the last one */
-        }
-
-        .practice-button:hover {
-            background-color: #00695c; /* Darken button background on hover */
-            box-shadow: 0 6px 12px rgba(0,0,0,0.2); /* Larger shadow on hover for a lifting effect */
-            transform: translateY(-2px); /* Move the button up slightly on hover */
-        }
-
-        .practice-button.active {
-            background-image: linear-gradient(to right, #009688, #00796b); /* Different gradient for active button */
-            border: 2px solid #004d40; /* Distinguished border for active button */
-        }
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Практика</title>
+  <style>
+    :root {
+      --primary-color: #004d40;
+      --accent-color: #00897b;
+      --light-color: #f5f5f5;
+      --text-color: #ffffff;
     }
 
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: var(--light-color);
+      color: var(--primary-color);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
 
-</style>
+    .navbar {
+      background-color: var(--primary-color);
+      display: flex;
+      justify-content: center;
+      padding: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-button {
+      background: transparent;
+      border: 2px solid transparent;
+      color: var(--text-color);
+      padding: 10px 20px;
+      margin: 0 5px;
+      font-size: 16px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .nav-button:hover {
+      background-color: var(--accent-color);
+      border-color: var(--text-color);
+    }
+
+    .nav-button.active {
+      background-color: var(--accent-color);
+    }
+
+    .content {
+      max-width: 1200px;
+      width: 95%;
+      margin: 40px auto;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .practice-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .practice-button {
+      background-color: var(--accent-color);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .practice-button:hover {
+      background-color: #00695c;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .practice-button.active {
+      background-image: linear-gradient(to right, #009688, #00796b);
+      border: 2px solid #004d40;
+    }
+
+    iframe {
+      width: 100%;
+      height: 80vh;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 768px) {
+      .practice-button {
+        width: 100%;
+        text-align: center;
+      }
+      iframe {
+        height: 60vh;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<ul class="navbar">
-    <li><a href="index.html" class="nav-button">Главная</a></li>
-    <li><a href="theory.html" class="nav-button">Теория</a></li>
-    <li><a href="practice.html" class="nav-button active">Практика</a></li>
-    <li><a href="testing.html" class="nav-button">Тестирование</a></li>
-    <li><a href="reference.html" class="nav-button">Справка</a></li>
-</ul>
+  <div class="navbar">
+    <button class="nav-button" onclick="location.href='index.html'">Главная</button>
+    <button class="nav-button" onclick="location.href='theory.html'">Теория</button>
+    <button class="nav-button active" onclick="location.href='practice.html'">Практика</button>
+    <button class="nav-button" onclick="location.href='testing.html'">Тестирование</button>
+    <button class="nav-button" onclick="location.href='reference.html'">Справка</button>
+  </div>
 
-<div class="content">
+  <div class="content">
     <div class="practice-buttons">
-        <a href="lab1.pdf" class="practice-button active">Практика 1</a>
-        <a href="lab2.pdf" class="practice-button">Практика 2</a>
-        <a href="lab3.pdf" class="practice-button">Практика 3</a>
+      <button class="practice-button active" onclick="loadPDF('lab1.pdf')">Практика 1</button>
+      <button class="practice-button" onclick="loadPDF('lab2.pdf')">Практика 2</button>
+      <button class="practice-button" onclick="loadPDF('lab3.pdf')">Практика 3</button>
     </div>
-    <div class="pdf-viewer">
-        <iframe id="pdfFrame" style="width:100%; height:100%; border:none;" src=""></iframe>
-    </div>
-</div>
 
-<script>
+    <iframe id="pdfViewer" src=""></iframe>
+  </div>
+
+  <script>
+    function loadPDF(filePath) {
+      document.getElementById('pdfViewer').src = filePath;
+      const buttons = document.querySelectorAll('.practice-button');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
-        var buttons = document.querySelectorAll('.practice-button');
-        var pdfFrame = document.getElementById('pdfFrame');
-        buttons.forEach(function(button) {
-            button.addEventListener('click', function(e) {
-                e.preventDefault(); // Prevent default link behaviour
-                var filePath = this.getAttribute('href');
-                if (filePath.endsWith('.pdf')) { // Make sure it's a PDF link
-                    pdfFrame.src = filePath;
-                    // Optionally, highlight the active button
-                    buttons.forEach(function(btn) { btn.classList.remove('active'); });
-                    this.classList.add('active');
-                }
-            });
-        });
+      loadPDF('lab1.pdf'); // Загружать первую практику сразу
     });
-</script>
+  </script>
 
 </body>
 </html>

@@ -1,124 +1,175 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Электронный учебник</title>
-<style>
-  body {
-    font-family: 'Arial', sans-serif;
-    background-color: #004d40;
-    color: white;
-    text-align: center;
-    padding: 100px;
-  }
-  .header {
-    margin-bottom: 50px;
-  }
-  .time {
-    font-size: 24px;
-    margin-top: 50px;
-  }
-  .navbar {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 30px;
-  }
-  .nav-button {
-    background-color: transparent;
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    transition-duration: 0.4s;
-    cursor: pointer;
-  }
-  .nav-button:hover {
-    background-color: white;
-    color: black;
-  }
-  .active {
-    background-color: #00897b;
-    color: white;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Электронный учебник</title>
+  <style>
+    :root {
+      --primary-color: #004d40;
+      --accent-color: #00897b;
+      --light-color: #f5f5f5;
+      --danger-color: #e53935;
+      --text-color: #ffffff;
+    }
 
-  .admin-container {
-    display: flex; /* Используем Flexbox */
-    justify-content: center; /* Центрируем содержимое по горизонтали */
-    margin-top: 20px; /* Отступ сверху для отделения от других элементов */
-  }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, var(--light-color), #e0e0e0);
+      color: var(--primary-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-  .admin-button {
-      background-color: #f44336; /* Красный цвет фона */
-      color: white; /* Белый текст */
-      padding: 12px 24px; /* Паддинг */
-      font-size: 18px; /* Размер шрифта */
-      border: none; /* Убираем рамку */
-      border-radius: 8px; /* Округление углов */
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень */
-      transition: all 0.3s ease; /* Плавное изменение */
-      cursor: pointer; /* Курсор в виде указателя */
-  }
+    .navbar {
+      background-color: var(--primary-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-  .admin-button:hover {
-      background-color: #e53935; /* Темнее красный при наведении */
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Большая тень при наведении */
-  }
+    .nav-button {
+      background: transparent;
+      border: 2px solid transparent;
+      color: var(--text-color);
+      padding: 10px 20px;
+      margin: 0 5px;
+      font-size: 16px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
 
-</style>
+    .nav-button:hover {
+      background-color: var(--accent-color);
+      border-color: var(--text-color);
+    }
+
+    .nav-button.active {
+      background-color: var(--accent-color);
+    }
+
+    .header {
+      text-align: center;
+      padding: 50px 20px 20px;
+      margin-top: 20px;
+    }
+
+    .header h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+      color: var(--primary-color);
+    }
+
+    .header h2 {
+      font-size: 32px;
+      color: var(--accent-color);
+      margin-bottom: 10px;
+    }
+
+    .header h3 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .header p {
+      font-size: 18px;
+      color: #555;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .time {
+      text-align: center;
+      font-size: 20px;
+      margin: 40px 0 20px;
+      color: #333;
+    }
+
+    .admin-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+
+    .admin-button {
+      background-color: var(--danger-color);
+      color: var(--text-color);
+      border: none;
+      padding: 14px 28px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .admin-button:hover {
+      background-color: #c62828;
+      transform: translateY(-2px);
+    }
+  </style>
 </head>
 <body>
 
-<div class="navbar">
-  <button class="nav-button active" onclick="window.location.href='index.html';">Главная</button>
-  <button class="nav-button" onclick="window.location.href='theory.html';">Теория</button>
-  <button class="nav-button" onclick="window.location.href='practice.html';">Практика</button>
-  <button class="nav-button" onclick="window.location.href='testing.html';">Тестирование</button>
-  <button class="nav-button" onclick="window.location.href='reference.html';">Справка</button>
-</div>
+  <div class="navbar">
+    <button class="nav-button active" onclick="window.location.href='index.html';">Главная</button>
+    <button class="nav-button" onclick="window.location.href='theory.html';">Теория</button>
+    <button class="nav-button" onclick="window.location.href='practice.html';">Практика</button>
+    <button class="nav-button" onclick="window.location.href='testing.html';">Тестирование</button>
+    <button class="nav-button" onclick="window.location.href='reference.html';">Справка</button>
+  </div>
 
-<div class="header">
-  <h1>Доброго времени суток!</h1>
-  <h2>Электронный учебник</h2>
-  <h3>по теме: "Использование встроенного языка 1с"</h3>
-  <p>Этот учебник поможет вам изучить данную тему с помощью теории,<br>
-  закрепить практическую часть и проверить знания с помощью тестирования.</p>
-</div>
+  <div class="header">
+    <h1>Добро пожаловать!</h1>
+    <h2>Электронный учебник</h2>
+    <h3>Тема: "Использование встроенного языка 1С"</h3>
+    <p>
+      Этот учебник поможет вам освоить теоретический материал, закрепить знания на практике 
+      и проверить себя в тестировании. Учитесь легко и эффективно!
+    </p>
+  </div>
 
-<div class="time" id="time">
-  Сейчас: <span id="realtime"></span>
-</div>
-<div class="admin-container">
-  <button id="adminButton" class="button admin-button" onclick="location.href='admin.html'">Администрирование</button>
-</div>
+  <div class="time">
+    Сейчас: <span id="realtime"></span>
+  </div>
 
+  <div class="admin-container">
+    <button id="adminButton" class="admin-button">Администрирование</button>
+  </div>
 
-<script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      const adminButton = document.getElementById('adminButton');
 
-  document.addEventListener('DOMContentLoaded', function() {
-      const currentUser = JSON.parse(localStorage.getItem('currentUser')); // Assume currentUser is stored as an object
       if (currentUser && currentUser.isAdmin) {
-          document.getElementById('adminButton').style.display = 'block';
+        adminButton.style.display = 'block';
+        adminButton.onclick = function () {
+          window.location.href = 'admin.html';
+        };
       } else {
-          document.getElementById('adminButton').style.display = 'none';
+        adminButton.style.display = 'none';
       }
-  });
+    });
 
-  function updateTime() {
-    const now = new Date();
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    document.getElementById('realtime').textContent = `${hours}:${minutes}:${seconds}`;
-  }
-  
-  setInterval(updateTime, 1000);
-  updateTime(); // Инициализация времени сразу при загрузке страницы
-</script>
+    function updateTime() {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      document.getElementById('realtime').textContent = timeString;
+    }
+
+    setInterval(updateTime, 1000);
+    updateTime();
+  </script>
 
 </body>
 </html>
