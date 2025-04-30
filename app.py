@@ -178,7 +178,8 @@ def save_result():
         return jsonify({'success': True})
     else:
         return jsonify({'success': False, 'error': response.text}), 400
-    
+
+
 @app.route('/get_results', methods=['GET'])
 def get_results():
     response = requests.get(
@@ -190,6 +191,7 @@ def get_results():
         return jsonify({'success': True, 'results': results})
     else:
         return jsonify({'success': False, 'error': response.text}), 500
+
 
 @app.route('/update_user', methods=['PATCH'])
 def update_user():
@@ -212,6 +214,3 @@ def update_user():
         return jsonify({'success': True})
     else:
         return jsonify({'success': False, 'error': response.text}), 400
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
