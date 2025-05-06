@@ -1,3 +1,5 @@
+const API_BASE_URL = window.location.origin;
+
 document.addEventListener('DOMContentLoaded', function () {
     loadUsers();
     loadResults();
@@ -8,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function loadUsers() {
-    fetch('http://localhost:5000/get_users')
+    fetch(`${API_BASE_URL}/get_users`)
         .then(response => response.json())
         .then(users => {
             if (Array.isArray(users)) {
@@ -35,7 +37,7 @@ function addUser() {
         return;
     }
 
-    fetch('http://localhost:5000/add_user', {
+    fetch(`${API_BASE_URL}/add_user`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -67,11 +69,9 @@ function addUserToTable(user) {
     newRow.insertCell(1).textContent = user.username || '—';
     newRow.insertCell(2).textContent = user.password || '—';
 
-    // ФИО — сделаем редактируемым
     const fullNameCell = newRow.insertCell(3);
     fullNameCell.innerHTML = `<input type="text" value="${user.full_name || ''}" onchange="updateUserField('${user.username}', 'full_name', this.value)">`;
 
-    // Номер группы — тоже редактируемый
     const groupCell = newRow.insertCell(4);
     groupCell.innerHTML = `<input type="text" value="${user.group_name || ''}" onchange="updateUserField('${user.username}', 'group_name', this.value)">`;
 
@@ -91,7 +91,7 @@ function removeUser(username) {
         return;
     }
 
-    fetch(`http://localhost:5000/delete_user?username=${encodeURIComponent(username)}`, {
+    fetch(`${API_BASE_URL}/delete_user?username=${encodeURIComponent(username)}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json'
@@ -116,7 +116,7 @@ function removeUser(username) {
 }
 
 function updateUserField(username, field, newValue) {
-    fetch('http://localhost:5000/update_user', {
+    fetch(`${API_BASE_URL}/update_user`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json'
@@ -142,7 +142,7 @@ function updateUserField(username, field, newValue) {
 }
 
 function loadResults() {
-    fetch('http://localhost:5000/get_results')
+    fetch(`${API_BASE_URL}/get_results`)
         .then(response => response.json())
         .then(data => {
             if (data.success && Array.isArray(data.results)) {
