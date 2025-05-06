@@ -241,7 +241,8 @@
         function loadQuestionsForSelectedTest() {
             let selectedTest = localStorage.getItem('selectedTest') || 'test1';
 
-            fetch(`http://localhost:5000/questions?test_id=${selectedTest}`)
+            fetch(`${API_BASE_URL}/questions?test_id=${selectedTest}`)
+
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
