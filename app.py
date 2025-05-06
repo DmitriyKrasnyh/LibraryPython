@@ -2,12 +2,13 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from datetime import datetime
 import requests
+import os
 
 app = Flask(__name__)
 CORS(app)
 
-SUPABASE_URL = "https://aohdeigsdhunxyyqvqsz.supabase.co"
-SUPABASE_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFvaGRlaWdzZGh1bnh5eXF2cXN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4Nzk2MTEsImV4cCI6MjA2MTQ1NTYxMX0.qOHq1OeYtChWACr-CpI4Ft4rez7zF4GATl6f2mXaIyo"
+SUPABASE_URL = os.environ.get("SUPABASE_URL")
+SUPABASE_API_KEY = os.environ.get("SUPABASE_API_KEY")
 
 HEADERS = {
     "apikey": SUPABASE_API_KEY,
