@@ -1,10 +1,10 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from datetime import datetime
 import requests
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 CORS(app)
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
@@ -16,10 +16,17 @@ HEADERS = {
     "Content-Type": "application/json"
 }
 
-@app.route('/')
-def index():
-    return 'Сервер подключен через Supabase REST API!'
+# ======= СТАТИЧЕСКИЕ ФАЙЛЫ =======
 
+@app.route('/')
+def serve_index():
+    return send_from_directory(app.static_folder, 'index.html')
+
+@app.route('/<path:filename>')
+def serve_static(filename):
+    return send_from_directory(app.static_folder, filename)
+
+# ======= API МАРШРУТЫ =======
 
 @app.route('/get_users', methods=['GET'])
 def get_users():
@@ -29,13 +36,11 @@ def get_users():
     else:
         return jsonify({'success': False, 'error': response.text}), 500
 
-
 @app.route('/delete_user', methods=['DELETE'])
 def delete_user():
     username = request.args.get('username')
     if not username:
         return jsonify({'success': False, 'message': 'Не указан логин'}), 400
-
     response = requests.delete(
         f"{SUPABASE_URL}/rest/v1/users",
         headers=HEADERS,
@@ -46,19 +51,13 @@ def delete_user():
     else:
         return jsonify({'success': False, 'error': response.text}), 400
 
-
 @app.route('/login', methods=['POST'])
 def login():
     data = request.json
     username = data.get('username')
     password = data.get('password')
-
-    params = {
-        "username": f"eq.{username}",
-        "password": f"eq.{password}"
-    }
+    params = {"username": f"eq.{username}", "password": f"eq.{password}"}
     response = requests.get(f"{SUPABASE_URL}/rest/v1/users", headers=HEADERS, params=params)
-
     if response.status_code == 200:
         users = response.json()
         if users:
@@ -75,35 +74,25 @@ def login():
     else:
         return jsonify({'success': False, 'message': 'Ошибка соединения с базой'}), 500
 
-
 @app.route('/add_user', methods=['POST'])
 def add_user():
     data = request.json
-    username = data.get('username')
-    password = data.get('password')
-    is_admin = data.get('isAdmin', False)
-    full_name = data.get('full_name', 'Не указано')
-    group_name = data.get('group_name', 'Не указано')
-
     user_data = {
-        "username": username,
-        "password": password,
-        "full_name": full_name,
-        "group_name": group_name,
-        "is_admin": is_admin
+        "username": data.get('username'),
+        "password": data.get('password'),
+        "full_name": data.get('full_name', 'Не указано'),
+        "group_name": data.get('group_name', 'Не указано'),
+        "is_admin": data.get('isAdmin', False)
     }
-
     response = requests.post(
         f"{SUPABASE_URL}/rest/v1/users",
         headers=HEADERS,
         json=user_data
     )
-
     if response.status_code in [200, 201]:
         return jsonify({'success': True})
     else:
         return jsonify({'success': False, 'error': response.text}), 400
-
 
 @app.route('/questions', methods=['GET'])
 def get_questions():
@@ -116,7 +105,6 @@ def get_questions():
         headers=HEADERS,
         params={"test_id": f"eq.{test_id}"}
     )
-
     if questions_response.status_code != 200:
         return jsonify({'success': False, 'message': 'Ошибка получения вопросов'}), 500
 
@@ -130,7 +118,6 @@ def get_questions():
             headers=HEADERS,
             params={"question_id": f"eq.{question_id}"}
         )
-
         if answers_response.status_code != 200:
             return jsonify({'success': False, 'message': 'Ошибка получения ответов'}), 500
 
@@ -143,7 +130,6 @@ def get_questions():
         })
 
     return jsonify({'success': True, 'questions': result})
-
 
 @app.route('/save_result', methods=['POST'])
 def save_result():
@@ -174,12 +160,10 @@ def save_result():
         headers=HEADERS,
         json=result_data
     )
-
     if response.status_code in [200, 201]:
         return jsonify({'success': True})
     else:
         return jsonify({'success': False, 'error': response.text}), 400
-
 
 @app.route('/get_results', methods=['GET'])
 def get_results():
@@ -188,11 +172,9 @@ def get_results():
         headers=HEADERS
     )
     if response.status_code == 200:
-        results = response.json()
-        return jsonify({'success': True, 'results': results})
+        return jsonify({'success': True, 'results': response.json()})
     else:
         return jsonify({'success': False, 'error': response.text}), 500
-
 
 @app.route('/update_user', methods=['PATCH'])
 def update_user():
@@ -210,8 +192,11 @@ def update_user():
         params={"username": f"eq.{username}"},
         json={field: value}
     )
-
     if response.status_code in [200, 204]:
         return jsonify({'success': True})
     else:
         return jsonify({'success': False, 'error': response.text}), 400
+
+# ======= Точка запуска =======
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
