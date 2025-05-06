@@ -359,7 +359,7 @@
 
             const currentUser = JSON.parse(localStorage.getItem('currentUser')) || {};
 
-            fetch('http://localhost:5000/save_result', {
+            fetch(`${window.location.origin}/save_result`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -405,7 +405,7 @@
             var username = document.getElementById('username').value;
             var password = document.getElementById('userPassword').value;
 
-            fetch('http://localhost:5000/login', {
+            fetch(`${window.location.origin}/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
