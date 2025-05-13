@@ -3,16 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Обучающие видео</title>
+  <title>Обучающее видео</title>
   <style>
     body {
+      font-family: Arial, sans-serif;
       margin: 0;
-      font-family: 'Roboto', sans-serif;
-      background: #f5f5f5;
-      color: #004d40;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+      padding: 0;
+      background: #f4f4f4;
     }
 
     .navbar {
@@ -20,72 +17,55 @@
       display: flex;
       justify-content: center;
       padding: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
     .nav-button {
       background: transparent;
-      border: 2px solid transparent;
+      border: none;
       color: white;
       padding: 10px 20px;
-      margin: 0 5px;
       font-size: 16px;
-      border-radius: 8px;
-      transition: all 0.3s ease;
       cursor: pointer;
     }
 
-    .nav-button:hover,
     .nav-button.active {
-      background-color: #00897b;
+      border-bottom: 2px solid #fff;
     }
 
     .container {
-      max-width: 900px;
-      margin: 40px auto;
+      max-width: 960px;
+      margin: 20px auto;
       padding: 20px;
       background: white;
-      border-radius: 12px;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
-    .video-wrapper {
-      position: relative;
-      padding-bottom: 56.25%; /* 16:9 */
-      height: 0;
-      overflow: hidden;
-      border-radius: 12px;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-      margin-bottom: 20px;
-    }
-
-    .video-wrapper iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
+    iframe {
       width: 100%;
-      height: 100%;
+      height: 600px;
+      border: none;
+      border-radius: 8px;
     }
 
-    .buttons {
+    .button-group {
+      margin-top: 20px;
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      justify-content: center;
     }
 
-    .video-button {
+    .button-group button {
       padding: 10px 20px;
       font-size: 14px;
-      border: none;
       background-color: #00897b;
       color: white;
-      border-radius: 8px;
+      border: none;
+      border-radius: 5px;
       cursor: pointer;
       transition: background 0.3s;
     }
 
-    .video-button:hover {
+    .button-group button:hover {
       background-color: #00695c;
     }
   </style>
@@ -96,35 +76,26 @@
     <button class="nav-button" onclick="location.href='theory.html'">Теория</button>
     <button class="nav-button" onclick="location.href='practice.html'">Практика</button>
     <button class="nav-button" onclick="location.href='testing.html'">Тестирование</button>
-    <button class="nav-button active" onclick="location.href='videos.html'">Видео</button>
+    <button class="nav-button active" onclick="location.href='video.html'">Видео</button>
   </div>
 
   <div class="container">
-    <div class="video-wrapper">
-      <iframe id="videoFrame" src="https://vk.com/video_ext.php?oid=718093348&id=456239723" frameborder="0" allowfullscreen></iframe>
-    </div>
-
-    <div class="buttons">
-      <button class="video-button" onclick="switchVideo(0)">Урок 1</button>
-      <button class="video-button" onclick="switchVideo(1)">Урок 2</button>
-      <button class="video-button" onclick="switchVideo(2)">Урок 3</button>
-      <button class="video-button" onclick="switchVideo(3)">Урок 4</button>
-      <button class="video-button" onclick="switchVideo(4)">Урок 5</button>
+    <h2>Обучающие видеоматериалы</h2>
+    <iframe id="videoPlayer" src="https://vk.com/video_ext.php?oid=718093348&id=456239723&hash=&hd=2" allowfullscreen></iframe>
+    
+    <div class="button-group">
+      <button onclick="changeVideo('456239723')">Видео 1</button>
+      <button onclick="changeVideo('456239722')">Видео 2</button>
+      <button onclick="changeVideo('456239725')">Видео 3</button>
+      <button onclick="changeVideo('456239724')">Видео 4</button>
+      <button onclick="changeVideo('456239726')">Видео 5</button>
     </div>
   </div>
 
   <script>
-    const vkVideos = [
-      "https://vk.com/video_ext.php?oid=718093348&id=456239723",
-      "https://vk.com/video_ext.php?oid=718093348&id=456239722",
-      "https://vk.com/video_ext.php?oid=718093348&id=456239725",
-      "https://vk.com/video_ext.php?oid=718093348&id=456239724",
-      "https://vk.com/video_ext.php?oid=718093348&id=456239726"
-    ];
-
-    function switchVideo(index) {
-      const frame = document.getElementById("videoFrame");
-      frame.src = vkVideos[index];
+    function changeVideo(videoId) {
+      const base = "https://vk.com/video_ext.php?oid=718093348&hash=&hd=2&id=";
+      document.getElementById('videoPlayer').src = `${base}${videoId}`;
     }
   </script>
 </body>
